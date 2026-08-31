@@ -53,13 +53,6 @@ secrets {
     ignoreList.add("FIREBASE_APPCHECK_DEBUG_TOKEN")
 }
 
-// Disable missing google-services.json error gracefully in Kotlin DSL
-project.gradle.taskGraph.whenReady {
-    tasks.findByName("processDebugGoogleServices")?.let { task ->
-        (task as? com.google.gms.googleservices.GoogleServicesPlugin.ConfigAction)?.let { }
-    }
-}
-
 dependencies {
     // Apache POI (Excel Export Support)
     implementation("org.apache.poi:poi:5.2.5")
