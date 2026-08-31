@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.aistudio.doubledozen.pwtqrx"
-        minSdk = 24
+        minSdk = 26 // Fixed: Set to 26 to support Apache POI Java MethodHandles
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
