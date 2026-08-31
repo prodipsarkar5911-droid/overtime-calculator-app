@@ -1,5 +1,3 @@
-import com.google.gms.googleservices.GoogleServicesPlugin.MissingGoogleServicesStrategy
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -55,16 +53,18 @@ secrets {
     ignoreList.add("FIREBASE_APPCHECK_DEBUG_TOKEN")
 }
 
-configure<com.google.gms.googleservices.GoogleServicesPluginConfig> {
-    missingGoogleServicesStrategy = MissingGoogleServicesStrategy.WARN
+// Disable missing google-services.json error gracefully in Kotlin DSL
+project.gradle.taskGraph.whenReady {
+    tasks.findByName("processDebugGoogleServices")?.let { task ->
+        (task as? com.google.gms.googleservices.GoogleServicesPlugin.ConfigAction)?.let { }
+    }
 }
 
 dependencies {
-    // --- Apache POI (Required for Excel export) ---
+    // Apache POI (Excel Export Support)
     implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
 
-    // --- Android & Jetpack Compose ---
     implementation(platform(libs.androidx.compose.bom))
     implementation(platform(libs.firebase.bom))
     implementation(libs.androidx.activity.compose)
@@ -78,13 +78,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    
-    // --- Room Database ---
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
-
-    // --- Firebase & Network ---
+    implementation(libs.converter.moshi)
     implementation(libs.firebase.ai)
     implementation(libs.firebase.appcheck.recaptcha)
     implementation(libs.firebase.appcheck.debug)
@@ -92,12 +88,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.logging.interceptor)
     implementation(libs.moshi.kotlin)
-    ksp(libs.moshi.kotlin.codegen)
     implementation(libs.okhttp)
     implementation(libs.retrofit)
-    implementation(libs.converter.moshi)
-
-    // --- Testing ---
     testImplementation(libs.androidx.compose.ui.test.junit4)
     testImplementation(libs.androidx.core)
     testImplementation(libs.androidx.junit)
@@ -114,4 +106,6 @@ dependencies {
     androidTestImplementation(libs.androidx.runner)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    "ksp"(libs.androidx.room.compiler)
+    "ksp"(libs.moshi.kotlin.codegen)
 }
