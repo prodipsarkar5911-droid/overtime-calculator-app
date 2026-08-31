@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.google.devtools.ksp)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.secrets)
-    alias(libs.plugins.google.services)
+    // alias(libs.plugins.google.services) // Disabled to prevent missing google-services.json build failure
 }
 
 android {
